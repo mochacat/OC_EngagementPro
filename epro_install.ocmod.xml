@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Add Engagement PRO</name>
+    <version>1.0</version>
+    <code>EPRO1</code>
+    <author>Cat Mocha</author>
+    <link>https://github.com/mochacat</link>
+    <file path="catalog/controller/common/header.php">
+        <operation info="Add Engagement PRO search query script">
+            <search><![CDATA[
+                $data['cart'] = $this->load->controller('common/cart');
+            ]]></search>
+            <add position="after"><![CDATA[
+                //Engagement PRO Script
+                $this->document->addScript('catalog/view/javascript/engagement_search.js');
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/view/template/common/menu.tpl">
+        <operation info="Add Engagement PRO to menu">
+            <search><![CDATA[
+                <li><a href="<?php echo $report_customer_credit; ?>"><?php echo $text_report_customer_credit; ?></a></li>
+            ]]></search>
+            <add position="after"><![CDATA[
+                <li><a href="<?php echo str_replace('report/customer_credit', 'report/engagement_pro', $report_customer_credit); ?>">Engagement PRO</a></li>
+            ]]></add>
+        </operation>
+    </file>
+</modification>
+
