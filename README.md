@@ -7,8 +7,9 @@ a) <strong>Search</strong>: Generates report on specific search queries made by 
 <br>
 b) <strong>Repeat Customers</strong>: Generates report on customers who have made repeat purchases.
 
-<h3>Compatibility</h3>
-OpenCart version 2.0 to version 2.0.2.0
+<h3>Requirements</h3>
+<ul>OpenCart version 2.0.3.1 to version 2.0.3.1
+PHP 5.3 and up</ul>
 
 <h3>Install</h3>
 1) Upload the following files to your OpenCart store root directory:

@@ -20,7 +20,9 @@ class ControllerAccountEngagementPro extends Controller {
     {
         $customer = array();
         $customer['customer_id'] = ($this->customer->isLogged()) ? $this->customer->getId() : 0 ;
-        $customer['ip'] = $this->request->server['REMOTE_ADDR'];
+        
+        $host = gethostname();
+        $customer['ip'] = gethostbyname($host);
         return $customer;
     }
 }
