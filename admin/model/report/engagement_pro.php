@@ -18,15 +18,15 @@ class ModelReportEngagementPro extends Model
         if (!$table_exists->num_rows)
         {
             $sql = 'CREATE TABLE ' . DB_PREFIX . 'engagement_pro 
-                    (
-                        `engagement_id` INT(11) AUTO_INCREMENT, 
-                        `customer_id` INT(11),
-                        `ip` VARCHAR(15),
-                        `key` VARCHAR(64),
-                        `data` BLOB,
-                        `date_added` TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-                        PRIMARY KEY (`engagement_id`)
-                    )';
+                (
+                    `engagement_id` INT(11) AUTO_INCREMENT, 
+                    `customer_id` INT(11),
+                    `ip` VARCHAR(15),
+                    `key` VARCHAR(64),
+                    `data` BLOB,
+                    `date_added` TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+                    PRIMARY KEY (`engagement_id`)
+                )';
             $query = $this->db->query($sql);
         }
     }
@@ -65,15 +65,17 @@ class ModelReportEngagementPro extends Model
 			}
 		}
         
-        $sql .= '
-			ORDER BY ep.date_added DESC
-            LIMIT ' . (int)$data['limit'];
-        
-        if ($data['start'] > 0){
+		if ($data['limit']){
+			$sql .= '
+				ORDER BY ep.date_added DESC
+			    LIMIT ' . (int)$data['limit'];
+		}
+		
+        if ($data['start']){
             $sql .= ' 
                 OFFSET ' . (int)$data['start'];
         }
- 
+		
         $query = $this->db->query($sql);
         return $query->rows;
     }

@@ -1,5 +1,6 @@
 <?php
 class ControllerReportEngagementPro extends Controller {
+	
     public function index() {
         $this->load->language('report/engagement_pro');
 
@@ -44,34 +45,13 @@ class ControllerReportEngagementPro extends Controller {
         );
 		
 		//Filters
-		
+		$filters = $this->grabFilters();
 		$filter_data = array();
+		$filter_data = $filters['data'];
 		
-		$lang['filters'] = array(
-			'filter_date_start', 'filter_date_end', 'filter_ip',
-			'filter_customer'
-		);
-		
-        foreach ($lang['filters'] as $filter){
-			if (isset($this->request->get[$filter])){
-				$filter_get = $this->request->get[$filter];
-
-				$url .= '&' . $filter . '=' . urlencode($filter_get); //pagination url
-				$data[$filter] = $filter_get; //filter text
-				
-				if ($filter == 'filter_customer'){
-					$this->load->model('sale/customer');
-					//need id, not name for db
-					$customer = $this->model_sale_customer->getCustomers(array('filter_name' => $filter_get));
-					if(isset($customer[0]['customer_id'])){
-						$filter_get = $customer[0]['customer_id'];	
-					}
-				}
-				$filter_data[$filter] = $filter_get; //filter results from db
-			} else {
-				$filter_data[$filter] = ''; //nothing to filter from db
-				$data[$filter] = ''; 
-			}
+		$url .= $filters['url'];
+		foreach ($filters['text'] as $key => $value){
+			$data[$key] = $value;
 		}
 		
 		$filter_data['start'] = ($page - 1) * $this->config->get('config_limit_admin');
@@ -218,6 +198,106 @@ class ControllerReportEngagementPro extends Controller {
             }
             $i++;
         }
-        return $format_repeat;
+		return $format_repeat;
     }
+	
+	/* Pull filter data from url and format it
+	 *
+	 * @return array formatted url, data text, 
+	 */
+	function grabFilters(){
+		$filter_data = array();
+		$filters = array('filter_date_start', 'filter_date_end', 'filter_ip','filter_customer');
+		foreach ($filters as $filter)
+		{
+			if (isset($this->request->get[$filter]))
+			{
+				$filter_get = $this->request->get[$filter];
+
+				$filter_data['url'] = '&' . $filter . '=' . urlencode($filter_get); //pagination url
+				$filter_data['text'][$filter] = $filter_get; //output text
+				
+				if ($filter == 'filter_customer')
+				{
+					$this->load->model('sale/customer');
+					//need id, not name for db
+					$customer = $this->model_sale_customer->getCustomers(array('filter_name' => $filter_get));
+					if(isset($customer[0]['customer_id']))
+					{
+						$filter_get = $customer[0]['customer_id'];
+					}
+				}
+				$filter_data['data'][$filter] = $filter_get; //filter results from db
+			}
+			else
+			{
+				$filter_data['url'] = '';
+				$filter_data['data'][$filter] = ''; //nothing to filter from db
+				$filter_data['text'][$filter] = ''; 
+			}
+		}
+		
+		return $filter_data;
+	}
+	
+	/* Format customers for the admin
+     * 
+     * @param array $customer_ids
+     * 
+     * @return array 
+     */
+    public function exportCSV()
+    {
+		$filter_data = $this->grabFilters();
+		$filter_data['data']['start'] = 0;
+		$filter_data['data']['limit'] = 0;
+		$csv = "";
+		$delimiter = ",";
+		
+		$this->load->model('report/engagement_pro');
+		$this->load->model('sale/customer');
+		
+		//limit to 1000 searches
+		if ($this->model_report_engagement_pro->countSearches($filter_data['data']) > 1000)
+		{
+			$filter_data['data']['limit'] = 1000;
+		}
+		
+		$searches = $this->model_report_engagement_pro->getSearches($filter_data['data']);
+		$delimiter = ",";
+		
+		$column_titles = array('engagement_id', 'customer', 'customer_email', 'ip', 'data', 'date_added' );
+		
+		$csv .= implode($delimiter, $column_titles);
+		$csv .=  "\n";
+		
+		foreach ($searches as $search)
+		{
+			foreach ($search as $key => $value)
+			{
+				if ($key != "key"){
+					if ($key == "data")
+					{
+						$value = unserialize($value);
+					}
+					else if ($key == "customer_id")
+					{
+						$customer = $this->model_sale_customer->getCustomer($value);
+						$value =  $customer['firstname'] . ' ' . $customer['lastname']
+							. $delimiter . $customer['email']
+						;
+					}
+					
+					$csv .= $value . $delimiter;
+
+				}
+			}
+			$csv .= "\n";
+		}
+		
+		$this->response->addHeader('Content-Type: text/csv; charset=utf-8');
+		$this->response->addHeader('Content-Description: File Transfer');
+		$this->response->addHeader('Content-Disposition: attachment; filename=data.csv');
+		$this->response->setOutput($csv, 0);
+	}
 }

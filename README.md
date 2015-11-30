@@ -43,4 +43,4 @@ This extension may not work with a modified OpenCart store or in conjunction wit
 
 <h3>TODO</h3>
 <ul>Add cart abandonment analytics</ul>
-<ul>Export data to CSV</ul>
+<ul>Export CSV & Filter options for Repeat Customers panel</ul>

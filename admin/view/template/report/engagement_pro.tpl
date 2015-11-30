@@ -101,6 +101,9 @@
                     <div class="col-sm-6 text-left"><?php echo $pagination['search']; ?></div>
                     <div class="col-sm-6 text-right"><?php echo $pages['search']; ?></div>
                 </div>
+                <button id="button-export" class="btn btn-default" style="width:130px;float:right">
+                    Export CSV <i class="fa fa-refresh"></i></span>
+                </button>
             </div>
             <div class="tab-pane" id="repeat" style="display:none;">
                 <div class="table-responsive">
@@ -171,37 +174,45 @@
     });
     
     $('#button-filter').on('click', function() {
-      url = 'index.php?route=report/engagement_pro&token=<?php echo $token; ?>';
-      
-      var filter_customer = $('input[name=\'filter_customer\']').val();
-      
-      if (filter_customer) {
-          url += '&filter_customer=' + encodeURIComponent(filter_customer);
-      }
-      var filter_ip = $('input[name=\'filter_ip\']').val();
-      
-      if (filter_ip) {
-          url += '&filter_ip=' + encodeURIComponent(filter_ip);
-      }
-      
-      var filter_date_start = $('input[name=\'filter_date_start\']').val();
-      
-      if (filter_date_start) {
-          url += '&filter_date_start=' + encodeURIComponent(filter_date_start);
-      }
-  
-      var filter_date_end = $('input[name=\'filter_date_end\']').val();
-      
-      if (filter_date_end) {
-          url += '&filter_date_end=' + encodeURIComponent(filter_date_end);
-      }
-  
-      location = url;
+        url = 'index.php?route=report/engagement_pro&token=<?php echo $token; ?>' + formatFilters();
+        location = url;
     });
+    
+    $('#button-export').on('click', function() {
+        url = 'index.php?route=report/engagement_pro/exportCSV&token=<?php echo $token; ?>' + formatFilters();
+        window.open(url);
+    });
+    
+    function formatFilters() {
+        var url = '';
+        var filter_customer = $('input[name=\'filter_customer\']').val();
+        
+        if (filter_customer) {
+            url += '&filter_customer=' + encodeURIComponent(filter_customer);
+        }
+        var filter_ip = $('input[name=\'filter_ip\']').val();
+        
+        if (filter_ip) {
+            url += '&filter_ip=' + encodeURIComponent(filter_ip);
+        }
+        
+        var filter_date_start = $('input[name=\'filter_date_start\']').val();
+        
+        if (filter_date_start) {
+            url += '&filter_date_start=' + encodeURIComponent(filter_date_start);
+        }
+    
+        var filter_date_end = $('input[name=\'filter_date_end\']').val();
+        
+        if (filter_date_end) {
+            url += '&filter_date_end=' + encodeURIComponent(filter_date_end);
+        }
+        return url;
+    }
 </script>
 <script type="text/javascript"><!--
 $('.date').datetimepicker({
-	pickTime: false
+    pickTime: false
 });
 //-->
 </script>
