@@ -8,9 +8,9 @@
     <file path="catalog/controller/common/header.php">
         <operation info="Add Engagement PRO search query script">
             <search><![CDATA[
-                $data['cart'] = $this->load->controller('common/cart');
+                $data['base'] = $server;
             ]]></search>
-            <add position="after"><![CDATA[
+            <add position="before"><![CDATA[
                 //Engagement PRO Script
                 $this->document->addScript('catalog/view/javascript/engagement_search.js');
             ]]></add>

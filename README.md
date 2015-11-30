@@ -26,13 +26,17 @@ catalog/model/account/engagment_pro.php</ul>
 
 <ul>catalog/controller/common/header.php</ul>
 
-<ul>Add  <code>$this->document->addScript('catalog/view/javascript/engagement_search.js');</code> after <code>$data['cart'] = $this->load->controller('common/cart');</code></ul>
+<ul>Add  <code>$this->document->addScript('catalog/view/javascript/engagement_search.js');</code> before <code>$data['base'] = $server;</code></ul>
 
 <h5>Add Engagement PRO link to admin menu</h5>
 
 <ul>admin/view/template/common/menu.tpl</ul>
 
 <ul>Add  <code>&#x3C;li&#x3E;&#x3C;a href=&#x22;&#x3C;?php echo str_replace(&#x27;report/customer_credit&#x27;, &#x27;report/engagement_pro&#x27;, $report_customer_credit); ?&#x3E;&#x22;&#x3E;Engagement PRO&#x3C;/a&#x3E;&#x3C;/li&#x3E;</code> after <code>&#x3C;li&#x3E;&#x3C;a href=&#x22;&#x3C;?php echo $report_customer_credit; ?&#x3E;&#x22;&#x3E;&#x3C;?php echo $text_report_customer_credit; ?&#x3E;&#x3C;/a&#x3E;&#x3C;/li&#x3E;</code></ul>
+
+<h5>Enable permissions</h5>
+
+<ul>Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission</ul>
 
 <h3>Note</h3>
 This extension may not work with a modified OpenCart store or in conjunction with other 3rd party extensions. 
