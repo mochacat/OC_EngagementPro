@@ -16,7 +16,7 @@ class ControllerAccountEngagementPro extends Controller {
         }
     }
     
-    public function getCustomerData()
+    private function getCustomerData()
     {
         $customer = array();
         $customer['customer_id'] = ($this->customer->isLogged()) ? $this->customer->getId() : 0 ;
