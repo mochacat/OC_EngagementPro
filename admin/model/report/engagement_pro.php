@@ -31,41 +31,85 @@ class ModelReportEngagementPro extends Model
         }
     }
     
-    /* Get total searches made by customers in the store front
+    /* Get searches made by customers in the store front
      * 
-     * @param $start int
-     * @param $limit int
-     * 
+     * @param $data array
      * @return object
      */
-    public function getSearches($start = 0, $limit = 20)
+    public function getSearches($data)
     {
         $sql = '
             SELECT *
-            FROM '. DB_PREFIX . 'engagement_pro
-            WHERE `key` = "search"
-            ORDER BY date_added DESC
-            LIMIT ' . (int)$limit;
-            
-        if ($start > 0){
-            $sql .= ' 
-                OFFSET ' . (int)$start;
-        }
+            FROM '. DB_PREFIX . 'engagement_pro as ep
+            WHERE ep.key = "search"';
         
-       $query = $this->db->query($sql);
-       return $query->rows;
+        if (!empty($data['filter_customer'])) {
+			$sql .= " AND ep.customer_id = '" . $this->db->escape($data['filter_customer']) . "'";
+		}
+
+		if (!empty($data['filter_ip'])) {
+			$sql .= " AND ep.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
+		}
+
+		if (!empty($data['filter_date_start'])) {
+			$start = $data['filter_date_start'];
+			$sql .= " AND DATE(ep.date_added) >= '" . $this->db->escape($start) . "'";
+		}
+
+		if (!empty($data['filter_date_end'])) {
+			//make sure end date is after start date
+			if (isset($start)){
+				if ($data['filter_date_end'] >= $start){
+					$sql .= " AND DATE(ep.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+				}
+			}
+		}
+        
+        $sql .= '
+			ORDER BY ep.date_added DESC
+            LIMIT ' . (int)$data['limit'];
+        
+        if ($data['start'] > 0){
+            $sql .= ' 
+                OFFSET ' . (int)$data['start'];
+        }
+ 
+        $query = $this->db->query($sql);
+        return $query->rows;
     }
     
-    /* Grab all the searches
-     * 
+    /* Count the number of total searches
+     *
+     * @param data array
      * @return int
      */
-    public function countSearches()
-    {
+    public function countSearches($data){
+
         $sql = '
             SELECT COUNT(*) as search_count
-            FROM '. DB_PREFIX . 'engagement_pro
-            WHERE `key` = "search"';
+            FROM '. DB_PREFIX . 'engagement_pro as ep
+            WHERE ep.`key` = "search"';
+        
+        if (!empty($data['filter_customer'])) {
+			$sql .= " AND ep.`customer_id` = '" . $this->db->escape($data['filter_customer']) . "'";
+		}
+
+		if (!empty($data['filter_ip'])) {
+			$sql .= " AND ep.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
+		}
+
+		if (!empty($data['filter_date_start'])) {
+			$start = $data['filter_date_start'];
+			$sql .= " AND DATE(ep.date_added) >= '" . $this->db->escape($start) . "'";
+		}
+
+		if (!empty($data['filter_date_end'])) {
+			if (isset($start)){
+				if ($data['filter_date_end'] >= $start){
+					$sql .= " AND DATE(ep.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+				}
+			}
+		}
         
         $query = $this->db->query($sql);
         return $query->rows[0]['search_count'];
@@ -101,7 +145,8 @@ class ModelReportEngagementPro extends Model
     }
     
     /* Get all products purchased per customer
-     * 
+     *
+     * @param customer_id int
      * @return string
      */
     public function getProductsByCustomer($customer_id)
@@ -117,14 +162,15 @@ class ModelReportEngagementPro extends Model
     }
     
     /* Grab total orders per customer
-     * 
+     *
+     * @param customer_id int
      * @return int
      */
     public function getTotalOrders($customer_id) 
     {
         $query = $this->db->query('SELECT COUNT(*) AS total 
-                FROM ' . DB_PREFIX . 'order 
-                WHERE customer_id = "' . (int)$customer_id . '"');
+                FROM ' . DB_PREFIX . 'order as o
+                WHERE o.customer_id = "' . (int)$customer_id . '"');
         return $query->row['total'];
     }
 }

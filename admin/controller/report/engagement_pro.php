@@ -11,13 +11,13 @@ class ControllerReportEngagementPro extends Controller {
         $data['breadcrumbs'] = array();
 
         $data['breadcrumbs'][] = array(
-                'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL'),
-                'text' => $this->language->get('text_home')
+            'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL'),
+            'text' => $this->language->get('text_home')
         );
 
         $data['breadcrumbs'][] = array(
-                'href' => $this->url->link('report/engagement_pro', 'token=' . $this->session->data['token'], 'SSL'),
-                'text' => $this->language->get('heading_title')
+            'href' => $this->url->link('report/engagement_pro', 'token=' . $this->session->data['token'], 'SSL'),
+            'text' => $this->language->get('heading_title')
         );
 
         $data['heading_title'] = $this->language->get('heading_title');
@@ -25,28 +25,61 @@ class ControllerReportEngagementPro extends Controller {
         $data['pane_title'] = $this->language->get('pane_title');
 
         $data['token'] = $this->session->data['token'];
-
+		$url = '';
+		
         if (isset($this->request->get['page'])) 
         {
             $page = $this->request->get['page'];
-	} 
+		} 
         else 
         {
             $page = 1;
-	}
-        
+		}
+			
         //Search Tab
         $lang['search'] = array(
             'tab_search', 'search_query', 'search_customer', 'search_ip',
-            'search_date',
+            'search_date', 'entry_date_start', 'entry_date_end', 'entry_ip',
+			'entry_customer','button_filter'
         );
+		
+		//Filters
+		
+		$filter_data = array();
+		
+		$lang['filters'] = array(
+			'filter_date_start', 'filter_date_end', 'filter_ip',
+			'filter_customer'
+		);
+		
+        foreach ($lang['filters'] as $filter){
+			if (isset($this->request->get[$filter])){
+				$filter_get = $this->request->get[$filter];
+
+				$url .= '&' . $filter . '=' . urlencode($filter_get); //pagination url
+				$data[$filter] = $filter_get; //filter text
+				
+				if ($filter == 'filter_customer'){
+					$this->load->model('sale/customer');
+					//need id, not name for db
+					$customer = $this->model_sale_customer->getCustomers(array('filter_name' => $filter_get));
+					if(isset($customer[0]['customer_id'])){
+						$filter_get = $customer[0]['customer_id'];	
+					}
+				}
+				$filter_data[$filter] = $filter_get; //filter results from db
+			} else {
+				$filter_data[$filter] = ''; //nothing to filter from db
+				$data[$filter] = ''; 
+			}
+		}
+		
+		$filter_data['start'] = ($page - 1) * $this->config->get('config_limit_admin');
+		$filter_data['limit'] = $this->config->get('config_limit_admin');
+	
+        $search_query = $this->model_report_engagement_pro->getSearches($filter_data);
         
-        $search_query = $this->model_report_engagement_pro->getSearches(
-                ($page - 1) * $this->config->get('config_limit_admin'), 
-                $this->config->get('config_limit_admin')
-                );
-        
-        $data['totals']['search'] = $this->model_report_engagement_pro->countSearches();
+        $data['totals']['search'] = $this->model_report_engagement_pro->countSearches($filter_data);
         $data['results']['search'] = ($data['totals']['search']) ? $this->formatSearches($search_query) : 0;
         
         //Repeat Tab
@@ -67,9 +100,10 @@ class ControllerReportEngagementPro extends Controller {
             foreach ($lang[$tab] as $tab_lang)
             {
                 $data[$tab_lang] = $this->language->get($tab_lang);
-            }
+			}
+			
             //need paginations for all tabs
-            $pagination = $this->createPagination($tab, $data['totals'][$tab], $page);
+            $pagination = $this->createPagination($url, $data['totals'][$tab], $page);
             $data['pagination'][$tab] = $pagination->render();
             
             $data['pages'][$tab] = sprintf(
@@ -88,21 +122,21 @@ class ControllerReportEngagementPro extends Controller {
     }
     
     /* Create pagination for each tab type
-     * 
-     * @param $tab string
+     *
+     * @param $url string
      * @param $total int
      * @param $page int
      * 
      * @return object
      */
-    public function createPagination($tab, $total, $page)
+    public function createPagination($url, $total, $page)
     {
         $pagination = new Pagination();
         $pagination->total = $total;
         $pagination->page = $page;
         $pagination->limit = $this->config->get('config_limit_admin');
         $pagination->url = $this->url->link('report/engagement_pro', 'token=' 
-                . $this->session->data['token'] . '&page={page}', 'SSL');
+            . $this->session->data['token'] . $url . '&page={page}', 'SSL');
         
         return $pagination;
     }
@@ -126,9 +160,9 @@ class ControllerReportEngagementPro extends Controller {
                 $customer = $this->model_sale_customer->getCustomer($result['customer_id']);
                 $format_search[$i]['customer']['name'] = $customer['firstname'] . ' ' . $customer['lastname'];
                 $format_search[$i]['customer']['url'] = $this->url->link(
-                        'sale/customer/edit', 
-                        'token=' . $this->session->data['token'] . '&customer_id=' . $result['customer_id'], 
-                        'SSL');
+                    'sale/customer/edit', 
+                    'token=' . $this->session->data['token'] . '&customer_id=' . $result['customer_id'], 
+                    'SSL');
             }
             else
             {
