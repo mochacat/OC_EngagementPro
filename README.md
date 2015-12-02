@@ -13,12 +13,12 @@ b) <strong>Repeat Customers</strong>: Generates report on customers who have mad
 <h3>Install</h3>
 1) Upload the following files to your OpenCart store root directory:
 
-<ul>admin/controller/report/engagement_pro.php
-admin/model/report/engagment_pro.tpl
-admin/view/template/report/engagment_pro.tpl
-admin/language/english/report/engagment_pro.php
-catalog/controller/account/engagment_pro.php
-catalog/model/account/engagment_pro.php</ul>
+<ul><li>admin/controller/report/engagement_pro.php</li>
+<li>admin/model/report/engagment_pro.tpl</li>
+<li>admin/view/template/report/engagment_pro.tpl</li>
+<li>admin/language/english/report/engagment_pro.php</li>
+<li>catalog/controller/account/engagment_pro.php</li>
+<li>catalog/model/account/engagment_pro.php</li></ul>
 
 2) Upload epro_install.ocmod.xml to the OpenCart extension installer in the admin or modify the following files:
 
