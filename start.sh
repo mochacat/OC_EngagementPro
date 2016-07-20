@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while ! timeout 1 bash -c 'cat < /dev/null > /dev/tcp/db/8181'; do sleep 0.1; done
+while ! timeout 1 bash -c 'cat < /dev/null > /dev/tcp/mysql/3306'; do sleep 0.1; done
 
 apache2 -DFOREGROUND
 
