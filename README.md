@@ -8,10 +8,11 @@ a) <strong>Search</strong>: Generates report on specific search queries made by 
 b) <strong>Repeat Customers</strong>: Generates report on customers who have made repeat purchases.
 
 <h3>Requirements</h3>
-<ul>OpenCart v 2.0-2.0.3.1 && PHP >=5.3</ul>
+<ul>OpenCart v 2.0.3.1 && PHP >=5.3</ul>
 
 <h3>Install</h3>
-1) Upload the following files to your OpenCart store root directory:
+
+1) Upload the following files to your OpenCart store root directory from the oc_epro folder:
 
 <ul><li>admin/controller/report/engagement_pro.php</li>
 <li>admin/model/report/engagment_pro.tpl</li>
@@ -20,7 +21,11 @@ b) <strong>Repeat Customers</strong>: Generates report on customers who have mad
 <li>catalog/controller/account/engagment_pro.php</li>
 <li>catalog/model/account/engagment_pro.php</li></ul>
 
-2) Upload epro_install.ocmod.xml to the OpenCart extension installer in the admin or modify the following files:
+2)
+
+a) Upload epro_install.ocmod.xml modification file to the system folder. Under Admin Home > Modifications click refresh to activate extension.  
+
+b) Or directly modify the following files (not recommended):
 
 <h5>Add Engagement PRO search query script</h5>
 
@@ -34,9 +39,18 @@ b) <strong>Repeat Customers</strong>: Generates report on customers who have mad
 
 <ul>Add  <code>&#x3C;li&#x3E;&#x3C;a href=&#x22;&#x3C;?php echo str_replace(&#x27;report/customer_credit&#x27;, &#x27;report/engagement_pro&#x27;, $report_customer_credit); ?&#x3E;&#x22;&#x3E;Engagement PRO&#x3C;/a&#x3E;&#x3C;/li&#x3E;</code> after <code>&#x3C;li&#x3E;&#x3C;a href=&#x22;&#x3C;?php echo $report_customer_credit; ?&#x3E;&#x22;&#x3E;&#x3C;?php echo $text_report_customer_credit; ?&#x3E;&#x3C;/a&#x3E;&#x3C;/li&#x3E;</code></ul>
 
-<h5>Enable permissions</h5>
+3. Enable permissions
 
 <ul>Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission</ul>
+
+<h3>Docker</h3>
+
+1. docker-compose up
+2. Visit http://localhost:8080 for OpenCart installation
+3. Visit http://localhost:8080/admin (user: admin, password: admin) to access the OpenCart admin
+4. Under Admin Home > Modifications click refresh to activate extension.  
+4. Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission.  
+4. Engagment PRO is accessible at http://localhost:8080/admin/index.php?route=report/engagement_pro
 
 <h3>Note</h3>
 This extension may not work with a modified OpenCart store or in conjunction with other 3rd party extensions. 
@@ -44,3 +58,4 @@ This extension may not work with a modified OpenCart store or in conjunction wit
 <h3>TODO</h3>
 <ul>Add cart abandonment analytics</ul>
 <ul>Export CSV & Filter options for Repeat Customers panel</ul>
+<ul>Port to other versions of OC</ul>
