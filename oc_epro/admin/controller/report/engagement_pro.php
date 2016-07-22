@@ -241,13 +241,13 @@ class ControllerReportEngagementPro extends Controller {
 	}
 	
 	/* Format customers for the admin
-     * 
-     * @param array $customer_ids
-     * 
-     * @return array 
-     */
-    public function exportCSV()
-    {
+  * 
+  * @param array $customer_ids
+  * 
+  * @return array 
+  */
+  public function exportCSV()
+  {
 		$filter_data = $this->grabFilters();
 		$filter_data['data']['start'] = 0;
 		$filter_data['data']['limit'] = 0;
@@ -283,9 +283,13 @@ class ControllerReportEngagementPro extends Controller {
 					else if ($key == "customer_id")
 					{
 						$customer = $this->model_sale_customer->getCustomer($value);
-						$value =  $customer['firstname'] . ' ' . $customer['lastname']
-							. $delimiter . $customer['email']
-						;
+
+						if (isset($customer['firstname'])){
+							$value =  $customer['firstname'] . ' ' . $customer['lastname'] . $delimiter . $customer['email'];
+						} else {
+								$value = 'Guest' . $delimiter . 'guest';
+						}
+                                                
 					}
 					
 					$csv .= $value . $delimiter;
