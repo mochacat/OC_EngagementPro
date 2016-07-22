@@ -2,7 +2,7 @@
 class ControllerReportEngagementPro extends Controller {
 	
     public function index() {
-        $this->load->language('report/engagement_pro');
+	$this->load->language('report/engagement_pro');
 
         $this->document->setTitle($this->language->get('heading_title'));
 

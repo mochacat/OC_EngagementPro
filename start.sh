@@ -2,8 +2,6 @@
 
 while ! timeout 1 bash -c 'cat < /dev/null > /dev/tcp/mysql/3306'; do sleep 0.1; done
 
-apache2 -DFOREGROUND
-
 if [ -d install ]; then
   echo "starting OpenCart install..."
   
@@ -19,3 +17,5 @@ if [ -d install ]; then
   --email youremail@example.com \
   && rm -r install
 fi
+
+apache2 -DFOREGROUND

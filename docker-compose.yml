@@ -1,7 +1,13 @@
 opencart: 
   build: .
   volumes:
-    - oc_epro:/var/www/html/oc_epro
+    - ./oc_epro/admin/controller/report/engagement_pro.php:/var/www/html/admin/controller/report/engagement_pro.php
+    - ./oc_epro/admin/model/report/engagement_pro.php:/var/www/html/admin/model/report/engagement_pro.php
+    - ./oc_epro/admin/view/template/report/engagement_pro.tpl:/var/www/html/admin/view/template/report/engagement_pro.tpl
+    - ./oc_epro/admin/language/english/report/engagement_pro.php:/var/www/html/admin/language/english/report/engagement_pro.php
+    - ./oc_epro/catalog/controller/account/engagement_pro.php:/var/www/html/catalog/controller/account/engagement_pro.php
+    - ./oc_epro/catalog/model/account/engagement_pro.php:/var/www/html/catalog/model/account/engagement_pro.php
+    - ./oc_epro/catalog/view/javascript/engagement_search.js:/var/www/html/catalog/view/javascript/engagement_search.js
   hostname: opencart
   ports: 
     - "127.0.0.1:8080:80"

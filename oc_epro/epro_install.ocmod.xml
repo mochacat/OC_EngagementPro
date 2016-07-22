@@ -19,8 +19,8 @@
     <file path="admin/view/template/common/menu.tpl">
         <operation info="Add Engagement PRO to menu">
             <search><![CDATA[
-                <li><a href="<?php echo $report_customer_credit; ?>"><?php echo $text_report_customer_credit; ?></a></li>
-            ]]></search>
+		<li><a href="<?php echo $report_customer_credit; ?>"><?php echo $text_report_customer_credit; ?></a></li>
+	    ]]></search>
             <add position="after"><![CDATA[
                 <li><a href="<?php echo str_replace('report/customer_credit', 'report/engagement_pro', $report_customer_credit); ?>">Engagement PRO</a></li>
             ]]></add>
