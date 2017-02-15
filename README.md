@@ -43,14 +43,15 @@ b) Or directly modify the following files (not recommended):
 
 <ul>Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission</ul>
 
-<h3>Docker</h3>
+<h3>Docker (on dev branch)</h3>
 
-1. docker-compose up
-2. Visit http://localhost:8080 for OpenCart installation
-3. Visit http://localhost:8080/admin (user: admin, password: admin) to access the OpenCart admin
-4. Under Admin Home > Modifications click refresh to activate extension.  
-4. Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission.  
-4. Engagment PRO is accessible at http://localhost:8080/admin/index.php?route=report/engagement_pro
+1. Checkout dev branch
+2. docker-compose up
+3. Visit http://localhost:8080 for OpenCart installation
+4. Visit http://localhost:8080/admin (user: admin, password: admin) to access the OpenCart admin
+5. Under Admin Home > Modifications click refresh to activate extension.  
+6. Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission.  
+7. Engagment PRO is accessible at http://localhost:8080/admin/index.php?route=report/engagement_pro
 
 <h3>Note</h3>
 This extension may not work with a modified OpenCart store or in conjunction with other 3rd party extensions. 
