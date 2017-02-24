@@ -40,11 +40,14 @@ RUN mv admin/config-dist.php admin/config.php
 RUN chmod -R 777 image/ image/cache/ image/catalog/ 
 RUN chmod 777 system/library/session.php config.php admin/config.php
 
-# Dev environment
+# Dev mode
 
 RUN echo "\n display_errors = 1; \n error_reporting = E_ALL;" >> php.ini
 
-COPY oc_epro/epro_install.ocmod.xml system/epro_install.ocmod.xml
+#Update user group permissions for extension w/ install
+
+COPY user_group.sql user_group.sql
+RUN cat user_group.sql  >> install/opencart.sql
 
 COPY start.sh start.sh
 RUN chmod 777 start.sh

@@ -15,7 +15,8 @@ if [ -d install ]; then
   --username admin \
   --password admin \
   --email youremail@example.com \
-  && rm -r install
+  && rm -r install 
+  
 fi
 
 apache2 -DFOREGROUND
