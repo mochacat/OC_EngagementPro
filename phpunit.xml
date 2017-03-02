@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php">
+  <testsuites>
+    <testsuite name="admin-tests">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="OC_ROOT" value="/var/www/html" />
+  </php>
+</phpunit>

@@ -3,7 +3,7 @@ FROM ubuntu:latest
 RUN apt-get update
 
 # Install system tools and libraries
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl vim \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-pip vim \
   apache2 \
   php5 \
   libapache2-mod-php5 \ 
@@ -12,6 +12,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl vim \
   php5-curl \
   php5-mcrypt \
   && php5enmod mcrypt
+
+RUN pip install -U pip && pip install pywatch
+RUN apt-get install curl && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 # Set apache vars
 ENV APACHE_RUN_USER www-data
@@ -37,8 +40,8 @@ RUN tar xzf ${OC_FILE} --strip 2
 RUN chown -R www-data:www-data .
 RUN mv config-dist.php config.php 
 RUN mv admin/config-dist.php admin/config.php
-RUN chmod -R 777 image/ image/cache/ image/catalog/ 
-RUN chmod 777 system/library/session.php config.php admin/config.php
+RUN chmod -R 755 image/ image/cache/ image/catalog/ 
+RUN chmod 755 system/library/session.php config.php admin/config.php
 
 # Dev mode
 
@@ -48,6 +51,10 @@ RUN echo "\n display_errors = 1; \n error_reporting = E_ALL;" >> php.ini
 
 COPY user_group.sql user_group.sql
 RUN cat user_group.sql  >> install/opencart.sql
+
+#Install Composer dependencies
+RUN composer require beyondit/opencart-test-suite --dev
+RUN composer install
 
 COPY start.sh start.sh
 RUN chmod 777 start.sh

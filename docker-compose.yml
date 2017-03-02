@@ -9,6 +9,8 @@ opencart:
     - ./oc_epro/catalog/model/account/engagement_pro.php:/var/www/html/catalog/model/account/engagement_pro.php
     - ./oc_epro/catalog/view/javascript/engagement_search.js:/var/www/html/catalog/view/javascript/engagement_search.js
     - ./oc_epro/epro_install.ocmod.xml:/var/www/html/epro_install.ocmod.xml
+    - ./tests:/var/www/html/tests
+    - ./phpunit.xml:/var/www/html/phpunit.xml
   hostname: opencart
   ports: 
     - "127.0.0.1:8080:80"

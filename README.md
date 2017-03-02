@@ -53,6 +53,10 @@ b) Or directly modify the following files (not recommended):
 6. Under User Groups, check "report/engagementpro" in Access Permission and Modify Permission.  
 7. Engagment PRO is accessible at http://localhost:8080/admin/index.php?route=report/engagement_pro
 
+<h4>Running tests</h4>
+1. <code>sudo docker <container_name> exec --it bash</code>
+2. In /var/www/html run <code>vendor/bin/phpunit --testsuite admin-tests</code>
+
 <h3>Note</h3>
 This extension may not work with a modified OpenCart store or in conjunction with other 3rd party extensions. 
 
